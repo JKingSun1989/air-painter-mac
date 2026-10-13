@@ -2,7 +2,7 @@
 
 环境：Apple M1 Pro / ARM64、macOS 27.0、Python 3.11.15。未全面验证 Intel Mac、macOS 13 和 Python 3.12；macOS 13+ 是启动器声明的最低系统版本。
 
-当前版本通过 72 项单元测试：保留原 50 项，增加花朵渲染 5 项、开合时间控制 16 项及重叠笔画像素保护 1 项。
+当前版本通过 78 项单元测试：保留原 50 项，增加对象拖动、花朵渲染、开合时间控制和 Windows 平台适配测试。Windows 摄像头、窗口、权限提示和依赖标记目前在 macOS 上通过平台模拟与 Windows wheel 解析验证，尚未完成真实 Windows 摄像头验收。
 
 10 个集成脚本通过：`test_model.py`、`test_ui.py`、`test_mouse_ui.py`、`test_shapes_ui.py`、`test_hand_shapes.py`、`test_drag_ui.py`、`test_particles_ui.py`、`test_group_done_ui.py`、`test_exit_ui.py`、`test_time_ui.py`，另有 `doctor.py` 环境检查。
 

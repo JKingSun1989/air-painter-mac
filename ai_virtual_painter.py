@@ -1,4 +1,4 @@
-"""macOS adaptation of moizaiqbal40-ops/ai_virtual_painter (MIT).
+"""Desktop adaptation of moizaiqbal40-ops/ai_virtual_painter (MIT).
 Reuses upstream MediaPipe Tasks loop, configuration, gesture geometry,
 skeleton UI, palette and EMA drawing; adds explicit controls/history.
 Original source and copyright are retained in upstream/ and LICENSE.
@@ -29,11 +29,11 @@ from hand_interaction import HandInteraction, pinch_measurement, PINCH_OPEN
 from gesture_time import GestureTimeController
 from flower_animation import FlowerAnimation
 from controls import DwellControl, hit_test, render_controls, render_time_panel
-from mac_camera import require_camera_permission, open_camera
+from camera import require_camera_permission, open_camera
 from preferences import DEFAULT_PATH, DEFAULTS, load_preferences, save_preferences
 from ui_labels import TOOL_NAMES, INPUT_NAMES, COLOR_NAMES
 from particles import Particles
-from mac_window import create_window
+from window import create_window
 
 WINDOW = "Air Painter"
 WINDOW_TITLE = "AI 隔空绘画"
@@ -41,7 +41,7 @@ WINDOW_TITLE = "AI 隔空绘画"
 
 def create_landmarker():
     if not Path(MODEL_PATH).is_file():
-        raise RuntimeError("缺少本地手部模型，请运行 ./setup.sh。")
+        raise RuntimeError("缺少本地手部模型，请运行 setup.sh（macOS）或 setup.ps1（Windows）。")
     options = mp_vision.HandLandmarkerOptions(
         base_options=mp_python.BaseOptions(model_asset_path=MODEL_PATH,
                                            delegate=mp_python.BaseOptions.Delegate.CPU),
@@ -55,7 +55,7 @@ def create_landmarker():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Mac 本地 AI 隔空绘画")
+    parser = argparse.ArgumentParser(description="本地 AI 隔空绘画")
     parser.add_argument("--camera", type=int, default=0, help="摄像头编号，默认 0")
     parser.add_argument("--smoothing", type=float, default=None, help="EMA 系数 (0,1]，覆盖保存的平滑设置")
     parser.add_argument("--smoke-seconds", type=float, default=0, help="自动结束，用于实际摄像头/窗口测试")

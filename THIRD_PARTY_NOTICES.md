@@ -23,6 +23,6 @@
 
 Python、MediaPipe、OpenCV、NumPy、Pillow 和 PyObjC 均由使用者的安装环境提供，遵循各自许可；源码包不包含这些库的二进制或系统字体。
 
-MediaPipe Hand Landmarker 模型由 `setup.sh` 从 Google 官方地址下载，SHA-256 固定校验。官方测试图片由使用者按 README 下载。两种资源不包含在发布的源码包中，本项目 MIT 声明不覆盖它们。
+MediaPipe Hand Landmarker 模型由 `setup.sh`（macOS）或 `setup.ps1`（Windows）从 Google 官方地址下载，并执行固定 SHA-256 校验。官方测试图片由使用者按 README 下载。两种资源不包含在发布的源码包中，本项目 MIT 声明不覆盖它们。
 
 `docs/images/` 中的截图由本项目程序生成，使用合成手部输入，不包含真人摄像头图像或用户画作。

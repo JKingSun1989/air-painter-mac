@@ -16,45 +16,58 @@ os.environ.setdefault("XDG_CACHE_HOME", str(ROOT / ".cache"))
 MODEL_SHA256 = "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1"
 
 
+def expected_packages(requirements, target_platform=sys.platform):
+    expected = {}
+    for raw in requirements:
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        requirement, separator, marker = line.partition(";")
+        if separator and marker.strip() == "sys_platform == 'darwin'" and target_platform != "darwin":
+            continue
+        if "==" in requirement:
+            name, version = requirement.strip().split("==", 1)
+            expected[name] = version.strip()
+    return expected
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--camera", action="store_true", help="实际申请权限、读取摄像头并执行模型")
     parser.add_argument("--camera-index", type=int, default=0)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
+    system = platform.system()
     info = {"python": sys.version.split()[0], "executable": sys.executable,
-            "macos": platform.mac_ver()[0], "architecture": platform.machine(), "checks": {}}
+            "platform": system, "macos": platform.mac_ver()[0] if system == "Darwin" else None,
+            "architecture": platform.machine(), "checks": {}}
     errors = []
     if sys.version_info[:2] not in ((3, 11), (3, 12)):
-        errors.append("请使用 Python 3.11 或 3.12 运行 setup.sh。")
-    if platform.system() != "Darwin":
-        errors.append("此启动方案面向 macOS。")
+        errors.append("请使用 Python 3.11 或 3.12 运行本平台的安装脚本。")
+    if system not in ("Darwin", "Windows"):
+        errors.append("当前仅支持 macOS 和 Windows。")
     result = subprocess.run([sys.executable, "-m", "pip", "check"], capture_output=True, text=True)
     info["checks"]["dependencies"] = (result.stdout + result.stderr).strip()
     if result.returncode:
-        errors.append("依赖检查失败，请运行 ./setup.sh 修复。")
-    expected = {}
-    for line in (ROOT / "requirements.txt").read_text().splitlines():
-        if "==" in line:
-            name, version = line.split(";", 1)[0].strip().split("==")
-            expected[name] = version
+        errors.append("依赖检查失败，请重新运行本平台的安装脚本。")
+    expected = expected_packages((ROOT / "requirements.txt").read_text().splitlines())
     info["packages"] = {}
     for name, version in expected.items():
         try:
             installed = metadata.version(name)
             info["packages"][name] = installed
             if installed != version:
-                errors.append(f"{name} 需要 {version}，当前 {installed}。请运行 ./setup.sh。")
+                errors.append(f"{name} 需要 {version}，当前 {installed}。请重新运行本平台的安装脚本。")
         except metadata.PackageNotFoundError:
-            errors.append(f"缺少 {name}，请运行 ./setup.sh。")
+            errors.append(f"缺少 {name}，请重新运行本平台的安装脚本。")
     model_path = ROOT / "hand_landmarker.task"
     digest = hashlib.sha256(model_path.read_bytes()).hexdigest() if model_path.is_file() else "missing"
     info["checks"]["model_sha256"] = digest
     if digest != MODEL_SHA256:
-        errors.append("本地模型缺失或校验失败，请运行 ./setup.sh 重新下载。")
+        errors.append("本地模型缺失或校验失败，请运行本平台的安装脚本重新下载。")
     if not errors:
         try:
-            from mac_camera import camera_permission, require_camera_permission, open_camera
+            from camera import camera_permission, require_camera_permission, open_camera
             info["checks"]["camera_permission"] = camera_permission()
             if args.camera:
                 require_camera_permission()

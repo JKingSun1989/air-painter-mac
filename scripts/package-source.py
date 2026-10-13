@@ -9,24 +9,25 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = (
-    ".gitignore", "LICENSE", "README.md", "README_MAC.md", "TEST_REPORT.md",
+    ".gitignore", "LICENSE", "README.md", "README_MAC.md", "README_WINDOWS.md", "TEST_REPORT.md",
     "DRAG_IMPLEMENTATION.md", "THIRD_PARTY_NOTICES.md", "PUBLISHING.md",
     "requirements.txt", "requirements.lock.txt", "setup.sh", "start.sh",
+    "setup.ps1", "start_windows.ps1", "setup_windows.cmd", "start_windows.cmd",
     "ai_virtual_painter.py", "chinese_text.py", "config.py", "controls.py",
     "doctor.py", "drawing_objects.py", "flower_animation.py", "gesture_time.py",
-    "hand_interaction.py", "hand_utils.py", "mac_camera.py", "mac_window.py",
+    "hand_interaction.py", "hand_utils.py", "camera.py", "window.py",
     "painter_core.py", "particles.py", "preferences.py", "run_app.py", "ui.py",
     "ui_labels.py",
 )
-SOURCE_DIRS = ("scripts", "tests", "third_party", "upstream", "docs")
-SOURCE_SUFFIXES = {".py", ".sh", ".m", ".md", ".txt", ".png", ".mp4"}
+SOURCE_DIRS = (".github", "scripts", "tests", "third_party", "upstream", "docs")
+SOURCE_SUFFIXES = {".py", ".sh", ".ps1", ".cmd", ".m", ".md", ".txt", ".yml", ".png", ".mp4"}
 
 
 def source_files():
     files = [ROOT / name for name in ROOT_FILES]
     for directory in SOURCE_DIRS:
         files.extend(path for path in (ROOT / directory).rglob("*")
-                     if path.is_file() and not any(part.startswith(".") or part == "__pycache__"
+                     if path.is_file() and not any((part.startswith(".") and part != ".github") or part == "__pycache__"
                                                   for part in path.relative_to(ROOT).parts)
                      and (path.suffix in SOURCE_SUFFIXES or path.name.endswith("-LICENSE")))
     for path in files:

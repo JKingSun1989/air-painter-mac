@@ -34,4 +34,4 @@ python3 scripts/package-source.py
 
 生成 `dist/` 内的干净源码文件夹、ZIP、ZIP 的 SHA-256 校验文件和源码文件清单。打包只选择项目源码与公开文档；排除虚拟环境、模型、生成的 `.app`、缓存、设置、画作、测试输出和 Git 历史。
 
-下载者按 README 执行 `./setup.sh`，在自己的 Mac 上安装环境并生成 `.app`。该源码包不是独立运行的 Mac 应用安装包。
+macOS 下载者按 README 执行 `./setup.sh`，在自己的 Mac 上安装环境并生成 `.app`；Windows 下载者双击 `setup_windows.cmd` 完成依赖安装，再双击 `start_windows.cmd` 启动。源码包不是独立运行的安装包，首次安装需要联网下载依赖与 MediaPipe 模型。

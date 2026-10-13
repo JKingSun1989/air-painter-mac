@@ -6,6 +6,9 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 FONT_PATHS = (
+    "C:/Windows/Fonts/msyh.ttc",
+    "C:/Windows/Fonts/msyhbd.ttc",
+    "C:/Windows/Fonts/simhei.ttf",
     "/System/Library/Fonts/Hiragino Sans GB.ttc",
     "/System/Library/Fonts/STHeiti Light.ttc",
     "/System/Library/Fonts/STHeiti Medium.ttc",
@@ -18,7 +21,7 @@ def font(size):
     for path in FONT_PATHS:
         if Path(path).is_file():
             return ImageFont.truetype(path, size)
-    raise RuntimeError("找不到本机中文字体，请检查 macOS 系统字体。")
+    raise RuntimeError("找不到可用的中文字体，请确认系统已安装中文字体。")
 
 
 @lru_cache(maxsize=512)

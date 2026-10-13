@@ -1,4 +1,4 @@
-# AI 隔空绘画 · Air Painter for Mac
+# AI 隔空绘画 · Air Painter
 
 通过一只手在摄像头前绘画、捏合移动图形，或张开手指让花苞盛开。中文界面，手部识别、图形处理和动画全部在本机运行，无需账号或云端 AI API。
 
@@ -18,15 +18,17 @@ https://github.com/user-attachments/assets/4b30909b-5cf7-4863-87cb-e9a810ed5660
 - 彩色闪光和暖色火星特效，仅显示在预览，不写入画作。
 - 普通及透明背景 PNG 导出，鼠标绘画与无需摄像头模式。
 - TIME 花朵演示：捏合是花苞，逐渐张开同步展开，充分张开完成盛开；合拢可倒放。无进度条。
-- macOS 原生 `.app` 启动器、摄像头权限说明和本地设置保存。
+- macOS 原生 `.app` 与 Windows 一键启动脚本、本地设置保存。
 
 仅支持单手；通过按钮或快捷键切换绘画与 TIME，避免手势冲突。
 
 ## 安装与启动
 
-需要 macOS 13+、Python 3.11（也接受 3.12）和 Xcode Command Line Tools。已验证环境为 Apple Silicon / Python 3.11；其他 Mac 与 Python 3.12 尚未全面验证。不提供 Windows、Linux 支持。
+支持 macOS 13+ 和 64 位 Windows 10/11，需要 Python 3.11 或 3.12。macOS 已在 Apple Silicon 上验证；Windows 安装脚本和摄像头适配已经加入，但尚未在真实 Windows 设备上完成摄像头验收。不提供 Linux 支持。
 
-下载源码或克隆自己的仓库后，在项目根目录执行：
+下载源码或克隆自己的仓库后，在项目根目录执行对应平台的安装命令。
+
+macOS：
 
 ```bash
 # 没有这些工具时先安装：
@@ -41,7 +43,9 @@ chmod +x setup.sh start.sh scripts/build-app.sh
 
 `setup.sh` 创建 `.venv`、安装固定依赖、从 Google 官方地址下载并校验 MediaPipe 模型，再在本机编译 `Air Painter.app`。首次安装需要联网；日常推理和绘画在本机执行。安装完成后可双击项目里的 `Air Painter.app`，请保持它与项目文件、虚拟环境和模型在同一目录。
 
-首次使用按 macOS 提示允许摄像头访问；若项目位于“文稿”目录，也可能需要目录访问权限。权限问题可先使用 `./start.sh --foreground` 查看提示。
+Windows：双击 `setup_windows.cmd` 安装，安装完成后双击 `start_windows.cmd` 启动。也可在 PowerShell 中执行 `./setup.ps1` 和 `./start_windows.ps1`。首次启动若摄像头不可用，请在“设置 → 隐私和安全性 → 摄像头”开启摄像头访问及允许桌面应用访问摄像头。
+
+macOS 首次使用按系统提示允许摄像头访问；若项目位于“文稿”目录，也可能需要目录访问权限。权限问题可先使用 `./start.sh --foreground` 查看提示。
 
 程序默认暂停，点击“开始”或按空格开始绘画。
 
@@ -68,11 +72,11 @@ chmod +x setup.sh start.sh scripts/build-app.sh
 | 花朵演示 / 回到花苞 | J / N |
 | 退出 | 左下角“退出”、Q 或 Esc |
 
-退出后不会保留可编辑画布，请先保存 PNG。设置保存在 `settings.json`，画作保存在 `paintings/`；二者均不进入源码包。详细行为、快捷键和异常处理见 [Mac 使用说明](README_MAC.md)。
+Windows 花朵演示可运行 `start_windows.cmd --no-camera --time-demo`。退出后不会保留可编辑画布，请先保存 PNG。设置保存在 `settings.json`，画作保存在 `paintings/`；二者均不进入源码包。详细 Mac 行为、快捷键和异常处理见 [Mac 使用说明](README_MAC.md)，Windows 安装细节见 [Windows 使用说明](README_WINDOWS.md)。
 
 ## 技术与结构
 
-Python 3.11、MediaPipe Hand Landmarker Tasks VIDEO（仅一只手）、OpenCV、NumPy、Pillow，以及 PyObjC / AVFoundation / AppKit。
+Python 3.11/3.12、MediaPipe Hand Landmarker Tasks VIDEO（仅一只手）、OpenCV、NumPy、Pillow。macOS 使用 PyObjC / AVFoundation / AppKit 处理原生摄像头授权和应用启动；Windows 使用 OpenCV 摄像头后端和 PowerShell 启动脚本。
 
 | 文件 | 职责 |
 | --- | --- |
@@ -81,7 +85,8 @@ Python 3.11、MediaPipe Hand Landmarker Tasks VIDEO（仅一只手）、OpenCV�
 | `hand_interaction.py` | DRAW / IDLE / DRAG，归一化捏合、滞回与防抖 |
 | `gesture_time.py`、`flower_animation.py` | 手指开合映射与确定性可逆花朵渲染 |
 | `controls.py`、`chinese_text.py` | 中文界面与按钮 |
-| `scripts/Launcher.m`、`scripts/build-app.sh` | 原生启动器及本机构建 |
+| `camera.py`、`window.py` | macOS / Windows 摄像头与窗口适配 |
+| `scripts/Launcher.m`、`scripts/build-app.sh` | macOS 原生启动器及本机构建 |
 
 ## 测试
 
@@ -93,7 +98,13 @@ Python 3.11、MediaPipe Hand Landmarker Tasks VIDEO（仅一只手）、OpenCV�
 .venv/bin/python scripts/test_drag_ui.py
 ```
 
-当前 72 项单元测试和 10 个集成脚本已通过。窗口集成测试需要 macOS 图形会话；TIME / 捏合验收使用合成单手关键点，真实模型回归使用官方图片，不代表真人摄像头下的识别率已验证。
+Windows PowerShell：
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+```
+
+当前 78 项单元测试和 10 个集成脚本已通过 macOS 环境验证；新增 Windows 摄像头分支通过平台模拟测试，完整 Windows 安装和真实摄像头仍需在 Windows 设备验收。窗口集成测试需要桌面图形会话；TIME / 捏合验收使用合成单手关键点，真实模型回归使用官方图片，不代表真人摄像头下的识别率已验证。
 
 运行真实模型图片测试前，下载公开测试资源（不包含在源码包中）：
 
