@@ -12,14 +12,23 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.11', '3.12']
-        shell: [powershell, pwsh]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Parse Windows launcher scripts
-        shell: ${{ matrix.shell }}
+      - name: Parse Windows launcher scripts with PowerShell 5.1
+        shell: powershell
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path setup.ps1), [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) { $errors | ForEach-Object { Write-Error $_ }; exit 1 }
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path start_windows.ps1), [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) { $errors | ForEach-Object { Write-Error $_ }; exit 1 }
+      - name: Parse Windows launcher scripts with PowerShell 7
+        shell: pwsh
         run: |
           $tokens = $null
           $errors = $null

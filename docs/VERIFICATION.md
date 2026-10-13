@@ -2,7 +2,7 @@
 
 环境：Apple M1 Pro / ARM64、macOS 27.0、Python 3.11.15。未全面验证 Intel Mac、macOS 13 和 Python 3.12；macOS 13+ 是启动器声明的最低系统版本。
 
-原有 78 项单元测试已在 macOS 本机和 Windows Actions（Python 3.11/3.12）通过。2026-10-13 在 64 位 Windows 11 / Python 3.11.9 下，加入 4 项 Windows 启动器回归测试后，共 82 项通过；回归测试覆盖含空格及中文的项目路径、参数传递、退出状态、诊断失败阻止启动，以及中文 Windows PowerShell 的脚本编码读取。Windows Actions 增加 PowerShell 5.1 / 7 语法检查矩阵，新提交的远程结果以 Actions 为准。
+原有 78 项单元测试已在 macOS 本机和 Windows Actions（Python 3.11/3.12）通过。2026-10-13 在 64 位 Windows 11 / Python 3.11.9 下，加入 4 项 Windows 启动器回归测试后，共 82 项通过；回归测试覆盖含空格及中文的项目路径、参数传递、退出状态、诊断失败阻止启动，以及中文 Windows PowerShell 的脚本编码读取。Windows Actions 分别使用 PowerShell 5.1 / 7 执行语法检查，新提交的远程结果以 Actions 为准。
 
 本机 USB 摄像头检查成功读取 30 帧（640×480），并完成本地 MediaPipe 推理。生产窗口连续启动测试正常结束，其中一次 99 帧中有 1 帧识别到单手；该结果只证明摄像头、模型和窗口链路可运行，不表示全部真人绘画/拖动/TIME 手势或识别率已经验收。测试报告仅保留统计，不上传摄像头画面。
 
