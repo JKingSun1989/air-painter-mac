@@ -12,13 +12,14 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.11', '3.12']
+        shell: [powershell, pwsh]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Parse Windows launcher scripts
-        shell: pwsh
+        shell: ${{ matrix.shell }}
         run: |
           $tokens = $null
           $errors = $null

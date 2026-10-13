@@ -29,4 +29,6 @@
 
 窗口默认暂停，点击“开始”或按空格后绘画。所有快捷键和手势见根目录 README。绘画导出到项目下的 `paintings/`，偏好设置写入 `settings.json`；请先保存 PNG，退出时不会保存可编辑画布。
 
-Windows 安装脚本语法和 78 项单元测试已在 GitHub Actions 的 Windows Python 3.11/3.12 环境通过。摄像头权限和真实手势尚待实际 Windows 设备验收；macOS 使用说明见 [README_MAC.md](README_MAC.md)。
+2026-10-13 已在 64 位 Windows 11 / Python 3.11.9 / USB 摄像头环境完成安装、模型校验、82 项单元测试及绘画窗口启动验证。摄像头读取和本地模型推理正常；这不代表不同光线下的识别率或全部真人手势已经验收。macOS 使用说明见 [README_MAC.md](README_MAC.md)。
+
+安装脚本保留 UTF-8 BOM，确保 Windows 自带 PowerShell 5.1 正确读取中文。启动器支持路径及参数中的空格，并将程序退出状态返回给启动脚本。新增测试覆盖这些情况，Windows Actions 分别检查 PowerShell 5.1 和 PowerShell 7；远程结果以对应提交的 Actions 记录为准。

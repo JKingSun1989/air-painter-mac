@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/4b30909b-5cf7-4863-87cb-e9a810ed5660
 
 ## 安装与启动
 
-已适配 macOS 13+ 和 64 位 Windows 11（Windows 10 也支持），两端需要 Python 3.11 或 3.12。Windows 安装脚本和单元测试已在 Windows Actions 验证；真实摄像头仍需连接 Windows 设备验收。不提供 Linux 支持。
+已适配 macOS 13+ 和 64 位 Windows 11（Windows 10 也支持），两端需要 Python 3.11 或 3.12。Windows 11 已完成 USB 摄像头读取、本地推理及窗口启动验证；完整真人手势和不同光线下的识别率仍需人工验收。不提供 Linux 支持。
 
 从 [GitHub Releases 下载最新版源码包](https://github.com/JKingSun1989/air-painter-mac/releases/latest) 或克隆仓库后，在项目根目录执行对应平台的安装命令。
 
@@ -104,7 +104,7 @@ Windows PowerShell：
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-78 项单元测试已在 macOS 本机及 Windows Actions（Python 3.11/3.12）通过；10 个窗口集成脚本已在 macOS 桌面会话通过。Windows 摄像头启动和真实手势仍需连接实体摄像头人工验收；TIME / 捏合自动验收使用合成单手关键点，不代表真人摄像头下的识别率已验证。
+原有 78 项单元测试已在 macOS 本机及 Windows Actions（Python 3.11/3.12）通过；新增 4 项 Windows 启动器回归测试后，本机 Windows 11 / Python 3.11.9 共 82 项通过。10 个窗口集成脚本已在 macOS 桌面会话通过。Windows USB 摄像头读取、本地推理和窗口启动已验证，完整真人手势仍需人工验收；TIME / 捏合自动验收使用合成单手关键点，不代表真人摄像头下的识别率已验证。新提交的远程验证结果请查看 Actions。
 
 运行真实模型图片测试前，下载公开测试资源（不包含在源码包中）：
 
