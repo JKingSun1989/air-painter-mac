@@ -19,7 +19,7 @@ ROOT_FILES = (
     "ui_labels.py",
 )
 SOURCE_DIRS = ("scripts", "tests", "third_party", "upstream", "docs")
-SOURCE_SUFFIXES = {".py", ".sh", ".m", ".md", ".txt", ".png"}
+SOURCE_SUFFIXES = {".py", ".sh", ".m", ".md", ".txt", ".png", ".mp4"}
 
 
 def source_files():
