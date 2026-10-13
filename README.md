@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/4b30909b-5cf7-4863-87cb-e9a810ed5660
 
 ## 安装与启动
 
-支持 macOS 13+ 和 64 位 Windows 10/11，需要 Python 3.11 或 3.12。macOS 已在 Apple Silicon 上验证；Windows 安装脚本和摄像头适配已经加入，但尚未在真实 Windows 设备上完成摄像头验收。不提供 Linux 支持。
+已适配 macOS 13+ 和 64 位 Windows 11（Windows 10 也支持），两端需要 Python 3.11 或 3.12。Windows 安装脚本和单元测试已在 Windows Actions 验证；真实摄像头仍需连接 Windows 设备验收。不提供 Linux 支持。
 
 从 [GitHub Releases 下载最新版源码包](https://github.com/JKingSun1989/air-painter-mac/releases/latest) 或克隆仓库后，在项目根目录执行对应平台的安装命令。
 
