@@ -26,7 +26,7 @@ https://github.com/user-attachments/assets/4b30909b-5cf7-4863-87cb-e9a810ed5660
 
 支持 macOS 13+ 和 64 位 Windows 10/11，需要 Python 3.11 或 3.12。macOS 已在 Apple Silicon 上验证；Windows 安装脚本和摄像头适配已经加入，但尚未在真实 Windows 设备上完成摄像头验收。不提供 Linux 支持。
 
-下载源码或克隆自己的仓库后，在项目根目录执行对应平台的安装命令。
+从 [GitHub Releases 下载最新版源码包](https://github.com/JKingSun1989/air-painter-mac/releases/latest) 或克隆仓库后，在项目根目录执行对应平台的安装命令。
 
 macOS：
 
@@ -104,7 +104,7 @@ Windows PowerShell：
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-当前 78 项单元测试和 10 个集成脚本已通过 macOS 环境验证；新增 Windows 摄像头分支通过平台模拟测试，完整 Windows 安装和真实摄像头仍需在 Windows 设备验收。窗口集成测试需要桌面图形会话；TIME / 捏合验收使用合成单手关键点，真实模型回归使用官方图片，不代表真人摄像头下的识别率已验证。
+78 项单元测试已在 macOS 本机及 Windows Actions（Python 3.11/3.12）通过；10 个窗口集成脚本已在 macOS 桌面会话通过。Windows 摄像头启动和真实手势仍需连接实体摄像头人工验收；TIME / 捏合自动验收使用合成单手关键点，不代表真人摄像头下的识别率已验证。
 
 运行真实模型图片测试前，下载公开测试资源（不包含在源码包中）：
 

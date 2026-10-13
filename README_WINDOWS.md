@@ -29,4 +29,4 @@
 
 窗口默认暂停，点击“开始”或按空格后绘画。所有快捷键和手势见根目录 README。绘画导出到项目下的 `paintings/`，偏好设置写入 `settings.json`；请先保存 PNG，退出时不会保存可编辑画布。
 
-Windows 安装/摄像头尚待在实际 Windows 设备上完成验收；macOS 使用说明与 Windows 无关，见 [README_MAC.md](README_MAC.md)。
+Windows 安装脚本语法和 78 项单元测试已在 GitHub Actions 的 Windows Python 3.11/3.12 环境通过。摄像头权限和真实手势尚待实际 Windows 设备验收；macOS 使用说明见 [README_MAC.md](README_MAC.md)。
