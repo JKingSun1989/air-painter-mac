@@ -1,96 +1,120 @@
-# AI 隔空绘画 · Air Painter
+# AI Air Painter
 
-通过一只手在摄像头前绘画、捏合移动图形，或张开手指让花苞盛开。中文界面，手部识别、图形处理和动画全部在本机运行，无需账号或云端 AI API。
+**English** · [简体中文](README.zh-CN.md)
 
-## 完整功能演示
+Draw in the air with one hand, pinch to move your artwork, group strokes, and control a reversible flower animation by opening and closing your fingers. Hand tracking, drawing, and animation run locally on your computer. No account or cloud AI API is required.
+
+## Demo
 
 https://github.com/user-attachments/assets/4b30909b-5cf7-4863-87cb-e9a810ed5660
 
-视频依次演示画笔与粒子、几何形状、多笔分组、独立对象拖动与重抓、橡皮擦、撤销重做、PNG 导出、鼠标模式、单手识别和花朵开合。动作输入由合成单手关键点驱动，不包含真人摄像头画面；这段视频用于演示交互流程，不代表真人摄像头识别率测试。
+The video demonstrates the brush and particles, geometric shapes, multi-stroke groups, independent object dragging and re-grabbing, eraser, undo/redo, PNG export, mouse mode, single-hand tracking, and the flower animation. The interaction is driven by synthetic single-hand landmarks; the video does not show a real camera feed and is not a camera-recognition accuracy test.
 
-[下载 MP4](docs/videos/air-painter-demo.mp4) · [视频生成脚本](scripts/create_demo_video.py)
+[Download the MP4](docs/videos/air-painter-demo.mp4) · [Video generation script](scripts/create_demo_video.py)
 
-## 功能
+## Features
 
-- 食指隔空绘画；自由画笔、直线、矩形、椭圆、7 种颜色、橡皮擦。
-- 独立绘画对象；拇指与食指捏合抓取、拖动和释放，支持反复移动。
-- 多笔、多色分组；30 步撤销与重做，手部丢失保护。
-- 彩色闪光和暖色火星特效，仅显示在预览，不写入画作。
-- 普通及透明背景 PNG 导出，鼠标绘画与无需摄像头模式。
-- TIME 花朵演示：捏合是花苞，逐渐张开同步展开，充分张开完成盛开；合拢可倒放。无进度条。
-- macOS 原生 `.app` 与 Windows 一键启动脚本、本地设置保存。
+- Draw with your index finger. Use the freehand brush, line, rectangle, or ellipse tools, seven colors, and an eraser.
+- Create independent drawing objects. Pinch near a stroke to grab, drag, release, and move it again later.
+- Group strokes in multiple colors. Undo and redo up to 30 actions; brief hand-tracking loss is handled safely.
+- Add colorful sparks and warm embers while drawing. Particles appear in the preview and are not added to the artwork.
+- Export regular or transparent PNGs. Mouse drawing and a no-camera mode are also available.
+- Explore the reversible flower demo: pinch to form a bud, then open your fingers to make it bloom; close your fingers to rewind it. There is no progress bar.
+- Use the macOS native `.app` launcher or the Windows launch scripts. Settings are saved locally.
 
-仅支持单手；通过按钮或快捷键切换绘画与 TIME，避免手势冲突。
+The app tracks one hand. Switch between drawing and TIME modes with a button or keyboard shortcut to keep gestures unambiguous.
 
-## 安装与启动
+## Requirements
 
-已适配 macOS 13+ 和 64 位 Windows 11（Windows 10 也支持），两端需要 Python 3.11 或 3.12。Windows 11 已完成 USB 摄像头读取、本地推理及窗口启动验证；完整真人手势和不同光线下的识别率仍需人工验收。不提供 Linux 支持。
+- macOS 13 or later, or 64-bit Windows 11 (Windows 10 is also supported).
+- Python 3.11 or 3.12.
+- A camera for hand tracking. Mouse mode and the flower demo can run without one.
 
-从 [GitHub Releases 下载最新版源码包](https://github.com/JKingSun1989/air-painter-mac/releases/latest) 或克隆仓库后，在项目根目录执行对应平台的安装命令。
+Windows setup and unit tests have been verified in GitHub Actions. USB camera capture, local inference, and window startup have also been tested on Windows 11. Full real-hand gesture behavior and recognition under different lighting conditions still need manual testing. Linux is not supported.
 
-macOS：
+## Install and run
+
+Download the [latest source package from GitHub Releases](https://github.com/JKingSun1989/air-painter-mac/releases/latest), or clone this repository and run the commands for your platform from its root directory.
+
+### macOS
+
+Install the command line tools and Python if needed:
 
 ```bash
-# 没有这些工具时先安装：
 xcode-select --install
 brew install python@3.11
+```
 
-# 解压方式未保留执行权限时先执行：
+Then install and launch:
+
+```bash
+# Restore executable permissions if they were not preserved during extraction.
 chmod +x setup.sh start.sh scripts/build-app.sh
 ./setup.sh
 ./start.sh --foreground
 ```
 
-`setup.sh` 创建 `.venv`、安装固定依赖、从 Google 官方地址下载并校验 MediaPipe 模型，再在本机编译 `Air Painter.app`。首次安装需要联网；日常推理和绘画在本机执行。安装完成后可双击项目里的 `Air Painter.app`，请保持它与项目文件、虚拟环境和模型在同一目录。
+`setup.sh` creates a virtual environment, installs pinned dependencies, downloads and verifies the MediaPipe model from Google, and builds `Air Painter.app` locally. Internet access is needed for the first setup. Hand tracking and drawing run locally afterward. You can also double-click `Air Painter.app` in the project folder; keep it alongside the project files, virtual environment, and model.
 
-Windows：双击 `setup_windows.cmd` 安装，安装完成后双击 `start_windows.cmd` 启动。也可在 PowerShell 中执行 `./setup.ps1` 和 `./start_windows.ps1`。首次启动若摄像头不可用，请在“设置 → 隐私和安全性 → 摄像头”开启摄像头访问及允许桌面应用访问摄像头。
+At first launch, allow camera access when macOS asks. If the project is in Documents, macOS may also ask for folder access. Run `./start.sh --foreground` in Terminal to see permission errors. The app starts paused; click **Start** or press **Space** to draw.
 
-macOS 首次使用按系统提示允许摄像头访问；若项目位于“文稿”目录，也可能需要目录访问权限。权限问题可先使用 `./start.sh --foreground` 查看提示。
+### Windows
 
-程序默认暂停，点击“开始”或按空格开始绘画。
+Double-click `setup_windows.cmd`, then double-click `start_windows.cmd`. You can also use PowerShell:
+
+```powershell
+./setup.ps1
+./start_windows.ps1
+```
+
+If the camera is unavailable on first launch, enable camera access and **Let desktop apps access your camera** under **Settings → Privacy & security → Camera**.
+
+### Optional modes
 
 ```bash
-# 花朵开合演示
+# Flower opening/closing demo
 ./start.sh --foreground --time-demo
 
-# 无摄像头鼠标绘画
+# Mouse drawing without a camera
 ./start.sh --foreground --no-camera
 ```
 
-## 常用操作
+On Windows, run `start_windows.cmd --no-camera --time-demo` for the flower demo without a camera.
 
-| 操作 | 方法 |
+## Controls
+
+| Action | Control |
 | --- | --- |
-| 绘画 | 仅伸出食指 |
-| 移动对象 | 在笔迹附近捏合，保持捏合移动，张开释放 |
-| 多笔分组 | G 开启分组，F 完成当前组 |
-| 开始 / 暂停 | 空格 |
-| 画笔 / 直线 / 矩形 / 椭圆 | P / L / R / O |
-| 撤销 / 重做 | Z / Y |
-| 保存普通 / 透明 PNG | S / T |
-| TIME / 返回绘画 | K |
-| 花朵演示 / 回到花苞 | J / N |
-| 退出 | 左下角“退出”、Q 或 Esc |
+| Draw | Extend only the index finger |
+| Move an object | Pinch near a stroke, keep pinching while moving, then open your fingers to release |
+| Group multiple strokes | `G` to start grouping, `F` to finish the group |
+| Start / pause | `Space` |
+| Brush / line / rectangle / ellipse | `P` / `L` / `R` / `O` |
+| Undo / redo | `Z` / `Y` |
+| Save regular / transparent PNG | `S` / `T` |
+| TIME mode / return to drawing | `K` |
+| Flower demo / reset to bud | `J` / `N` |
+| Quit | **Quit** button, `Q`, or `Esc` |
 
-Windows 花朵演示可运行 `start_windows.cmd --no-camera --time-demo`。退出后不会保留可编辑画布，请先保存 PNG。设置保存在 `settings.json`，画作保存在 `paintings/`；二者均不进入源码包。详细 Mac 行为、快捷键和异常处理见 [Mac 使用说明](README_MAC.md)，Windows 安装细节见 [Windows 使用说明](README_WINDOWS.md)。
+The app does not preserve an editable canvas after quitting, so export your work as a PNG first. Preferences are saved in `settings.json`; artwork is saved in `paintings/`. These local files are excluded from the source package. See the [macOS guide](README_MAC.md) and [Windows guide](README_WINDOWS.md) for platform-specific details.
 
-## 技术与结构
+## Technology
 
-Python 3.11/3.12、MediaPipe Hand Landmarker Tasks VIDEO（仅一只手）、OpenCV、NumPy、Pillow。macOS 使用 PyObjC / AVFoundation / AppKit 处理原生摄像头授权和应用启动；Windows 使用 OpenCV 摄像头后端和 PowerShell 启动脚本。
+Python 3.11/3.12, MediaPipe Hand Landmarker Tasks in VIDEO mode (one hand), OpenCV, NumPy, and Pillow. macOS uses PyObjC, AVFoundation, and AppKit for native camera permissions and app launching. Windows uses the OpenCV camera backend and PowerShell launch scripts.
 
-| 文件 | 职责 |
+| File | Responsibility |
 | --- | --- |
-| `ai_virtual_painter.py` | 摄像头、单次模型推理和窗口主循环 |
-| `painter_core.py`、`drawing_objects.py` | 画布、对象、分组、命中检测与历史 |
-| `hand_interaction.py` | DRAW / IDLE / DRAG，归一化捏合、滞回与防抖 |
-| `gesture_time.py`、`flower_animation.py` | 手指开合映射与确定性可逆花朵渲染 |
-| `controls.py`、`chinese_text.py` | 中文界面与按钮 |
-| `camera.py`、`window.py` | macOS / Windows 摄像头与窗口适配 |
-| `scripts/Launcher.m`、`scripts/build-app.sh` | macOS 原生启动器及本机构建 |
+| `ai_virtual_painter.py` | Camera, one model inference per frame, and the main window loop |
+| `painter_core.py`, `drawing_objects.py` | Canvas, drawing objects, groups, hit testing, and history |
+| `hand_interaction.py` | DRAW / IDLE / DRAG states, normalized pinch detection, hysteresis, and debounce |
+| `gesture_time.py`, `flower_animation.py` | Finger-opening time mapping and deterministic, reversible flower rendering |
+| `controls.py`, `chinese_text.py` | Chinese interface and buttons |
+| `camera.py`, `window.py` | macOS / Windows camera and window adapters |
+| `scripts/Launcher.m`, `scripts/build-app.sh` | Native macOS launcher and local app build |
 
-## 测试
+## Tests
 
-安装环境后执行：
+After installing the environment, run:
 
 ```bash
 .venv/bin/python -m unittest discover -s tests -v
@@ -98,15 +122,15 @@ Python 3.11/3.12、MediaPipe Hand Landmarker Tasks VIDEO（仅一只手）、Ope
 .venv/bin/python scripts/test_drag_ui.py
 ```
 
-Windows PowerShell：
+On Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-原有 78 项单元测试已在 macOS 本机及 Windows Actions（Python 3.11/3.12）通过；新增 4 项 Windows 启动器回归测试后，本机 Windows 11 / Python 3.11.9 共 82 项通过。10 个窗口集成脚本已在 macOS 桌面会话通过。Windows USB 摄像头读取、本地推理和窗口启动已验证，完整真人手势仍需人工验收；TIME / 捏合自动验收使用合成单手关键点，不代表真人摄像头下的识别率已验证。新提交的远程验证结果请查看 Actions。
+The 78 unit tests passed locally on macOS and in Windows Actions on Python 3.11 and 3.12. After four Windows launcher regression tests were added, all 82 tests passed on Windows 11 with Python 3.11.9. Ten window integration scripts passed in a macOS desktop session. USB camera capture, local inference, and window startup have been tested on Windows 11; full real-hand gestures still need manual verification. Automated TIME and pinch tests use synthetic one-hand landmarks and do not establish real-camera recognition accuracy. See Actions for the latest remote test results.
 
-运行真实模型图片测试前，下载公开测试资源（不包含在源码包中）：
+To run the real-model image test, download its public test image (not included in the source package):
 
 ```bash
 mkdir -p test-output
@@ -114,12 +138,12 @@ curl -fL -o test-output/pointing_up.jpg https://storage.googleapis.com/mediapipe
 .venv/bin/python scripts/test_model.py
 ```
 
-更多结果、限制与人工测试步骤见 [验证说明](docs/VERIFICATION.md)。
+See [Verification notes](docs/VERIFICATION.md) for results, limitations, and manual test steps.
 
-## 来源与许可
+## Attribution and license
 
-基于 [moizaiqbal40-ops/ai_virtual_painter](https://github.com/moizaiqbal40-ops/ai_virtual_painter) 改造，保留原作者 Moeeza Iqbal 的版权声明及 [MIT LICENSE](LICENSE)。原版说明和代码保存在 `upstream/`。
+Adapted from [moizaiqbal40-ops/ai_virtual_painter](https://github.com/moizaiqbal40-ops/ai_virtual_painter). The original copyright notice for Moeeza Iqbal and the [MIT license](LICENSE) are preserved. The original project description and code are in `upstream/`.
 
-点到线段距离实现改编自 [medhanshcodezz/air-canvas](https://github.com/medhanshcodezz/air-canvas)，源码标注及原 MIT 许可证见 [第三方说明](THIRD_PARTY_NOTICES.md)。参考代码审计见 [DRAG_IMPLEMENTATION.md](DRAG_IMPLEMENTATION.md)。第三方库、模型和测试图片遵循各自的许可，不重新许可为本项目代码。
+The point-to-segment distance implementation is adapted from [medhanshcodezz/air-canvas](https://github.com/medhanshcodezz/air-canvas); source attribution and its original MIT license are in [Third-party notices](THIRD_PARTY_NOTICES.md). Other third-party libraries, models, and test images retain their respective licenses and are not relicensed as this project's code.
 
-准备上传自己的 GitHub 仓库见 [PUBLISHING.md](PUBLISHING.md)。
+For instructions on publishing your own GitHub repository, see [Publishing guide](PUBLISHING.md).

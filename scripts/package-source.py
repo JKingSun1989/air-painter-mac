@@ -9,7 +9,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = (
-    ".gitignore", "LICENSE", "README.md", "README_MAC.md", "README_WINDOWS.md", "TEST_REPORT.md",
+    ".gitignore", "LICENSE", "README.md", "README.zh-CN.md", "README_MAC.md", "README_WINDOWS.md", "TEST_REPORT.md",
     "DRAG_IMPLEMENTATION.md", "THIRD_PARTY_NOTICES.md", "PUBLISHING.md",
     "requirements.txt", "requirements.lock.txt", "setup.sh", "start.sh",
     "setup.ps1", "start_windows.ps1", "setup_windows.cmd", "start_windows.cmd",
